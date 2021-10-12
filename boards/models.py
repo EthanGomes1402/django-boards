@@ -4,6 +4,7 @@ from django.utils.text import Truncator
 from django.utils.html import mark_safe
 from markdown import markdown
 
+
 class Board(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=100)
@@ -42,4 +43,17 @@ class Post(models.Model):
         return truncated_message.char(30)
 
     def get_message_as_markdown(self):
-        return mark_safe(markdown(self.message, safe_mode='escape'))
+        return mark_safe(markdown(self.message,safe_mode='escape'))
+
+
+class Contact(models.Model):
+    name = models.CharField(max_length=50)
+    query = models.CharField(max_length=1000)
+    email = models.CharField(max_length=100, default=None)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.query
+
+
+

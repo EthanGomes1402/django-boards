@@ -20,9 +20,15 @@ from django.contrib.auth import views as auth_views
 from accounts import views as accounts_views
 from boards import views
 
+admin.site.site_header = "Boards Admin"
+admin.site.site_title = "Boards Admin Portal"
+admin.site.index_title = "Welcome to Boards Administrator Portal"
+
+
 
 urlpatterns = [
     path('', views.Boardlistview.as_view(), name='home'),
+
     path('signup/', accounts_views.signup, name='signup'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
@@ -69,4 +75,11 @@ urlpatterns = [
 
     path('settings/account', accounts_views.UserUpdateView.as_view(), name='my_account'),
 
+    path('boards/<int:pk>/contactus/', views.contact_us, name='contact_us'),
+
+    path('contactus/', views.contact_us, name='contact_us'),
+
+    path('contactinfo/', views.ContactListView.as_view(), name='contact_info'),
+
+    path('contactus/querynoted/', views.query_noted, name='query_noted'),
    ]

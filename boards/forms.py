@@ -1,5 +1,5 @@
 from django import forms
-from .models import Topic, Post
+from .models import Topic, Post, Contact
 
 
 class NewTopicForm(forms.ModelForm):
@@ -17,8 +17,19 @@ class NewTopicForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
-    message = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Enter reply'}), max_length=4000 )
+    message = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Enter reply'}), max_length=4000)
 
     class Meta:
         model = Post
         fields = ['message', ]
+
+
+class ContactForm(forms.ModelForm):
+    name = forms.CharField(widget=forms.Textarea(attrs={'rows': 1}))
+    email = forms.CharField(widget=forms.Textarea(attrs={'rows': 1}))
+    query = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Enter your query'}), max_length=500)
+
+    class Meta:
+        model = Contact
+        fields = ['name','email','query']
+

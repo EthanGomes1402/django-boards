@@ -1,21 +1,22 @@
-from django.contrib.auth.models import User
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Board, Topic, Post
-from .forms import NewTopicForm, PostForm
+from .models import Board, Topic, Post, Contact
+from .forms import NewTopicForm, PostForm, ContactForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.views.generic import UpdateView, ListView
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-
+from django.views.generic.edit import FormView
+from django.urls import reverse_lazy
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-
+from django.contrib.auth.decorators import permission_required
+# Using function based views-----------------------
 # def home(request):
 #    boards = Board.objects.all()
 #    return render(request, 'home.html', {'boards': boards})
 
-
+# Using Class Based Views-----------------
 class Boardlistview(ListView):
     model = Board
     context_object_name = 'boards'
@@ -61,11 +62,6 @@ class TopicListView(ListView):
         self.board = get_object_or_404(Board, pk=self.kwargs.get('pk'))
         queryset = self.board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
         return queryset
-
-
-def user_name(request, pk):
-    boardd = get_object_or_404(Board, pk=pk)
-    return render(request, 'user_name.html', {'boardd': boardd})
 
 
 @login_required
@@ -139,7 +135,7 @@ class PostUpdateView(UpdateView):
 class PostListView(ListView):
     model = Post
     context_object_name = 'posts'
-    template_name = 'topic_posts.html'
+    template_name = 'topic_posts.htm    l'
     paginate_by = 2
 
     def get_context_data(self, **kwargs):
@@ -152,3 +148,33 @@ class PostListView(ListView):
         self.topic = get_object_or_404(Topic, board__pk=self.kwargs.get('pk'), pk=self.kwargs.get('topic_pk'))
         queryset = self.topic.posts.order_by('created_on')
         return queryset
+
+
+def contact_us(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            Contact.objects.create(
+            query= form.cleaned_data.get('query'),
+            name= form.cleaned_data.get('name'),
+            email = form.cleaned_data.get('email'))
+        return redirect('query_noted')
+    else:
+        form = ContactForm()
+    return render(request, 'contact_us.html', {'form': form})
+
+
+def query_noted(request):
+    return render(request, 'query_confirmed.html')
+
+
+@method_decorator(permission_required('is_superuser'), name='dispatch')
+class ContactListView(ListView):
+    model = Contact
+    context_object_name = 'contacts'
+    template_name = 'contact_info.html'
+    paginate_by = 5
+
+
+
+
