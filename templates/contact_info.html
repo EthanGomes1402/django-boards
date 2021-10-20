@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}
+  {{ board.name }}  {{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Boards</a></li>
+  <li class="breadcrumb-item active">{{ board.name }}</li>
+{% endblock %}
+
+{% block content %}
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>No.</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Query</th>
+         <th>Created on</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for contact in contacts  %}
+        <tr>
+          <td>{{ forloop.counter }} </td>
+          <td>{{ contact.name }}</td>
+          <td>{{ contact.email }}</td>
+          <td>{{ contact.query }}</td>
+          <td>{{ contact.created_on }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+  {% include 'includes/pagination.html' %}
+
+
+{% endblock %}

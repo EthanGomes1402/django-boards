@@ -16,14 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from rest_framework import routers
 
 from accounts import views as accounts_views
 from boards import views
+from core import views as core_views
+
+
+router = routers.SimpleRouter()
+
+router.register(r'categories', core_views.CategoryModelViewSet, basename="category")
+router.register(r'transactions', core_views.TransactionModelViewSet, basename="transactions")
 
 admin.site.site_header = "Boards Admin"
 admin.site.site_title = "Boards Admin Portal"
 admin.site.index_title = "Welcome to Boards Administrator Portal"
-
 
 
 urlpatterns = [
@@ -82,4 +89,7 @@ urlpatterns = [
     path('contactinfo/', views.ContactListView.as_view(), name='contact_info'),
 
     path('contactus/querynoted/', views.query_noted, name='query_noted'),
-   ]
+
+    path('currencies/', core_views.CurrencyListAPIView.as_view(), name='currencies'),
+
+   ] + router.urls

@@ -3,6 +3,7 @@ from .models import Board, Topic, Contact
 from django.contrib.auth.models import Group
 
 
+
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'query', 'created_on')
 

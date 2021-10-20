@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import permission_required
 #    boards = Board.objects.all()
 #    return render(request, 'home.html', {'boards': boards})
 
+
 # Using Class Based Views-----------------
 class Boardlistview(ListView):
     model = Board
@@ -135,7 +136,7 @@ class PostUpdateView(UpdateView):
 class PostListView(ListView):
     model = Post
     context_object_name = 'posts'
-    template_name = 'topic_posts.htm    l'
+    template_name = 'topic_posts.html'
     paginate_by = 2
 
     def get_context_data(self, **kwargs):
@@ -174,6 +175,7 @@ class ContactListView(ListView):
     context_object_name = 'contacts'
     template_name = 'contact_info.html'
     paginate_by = 5
+
 
 
 
